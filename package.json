@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "postinstall": "remix setup node",
-    "build": "remix build && node ./build.js && mkdir -p .output/static && cp -r public/build .output/static/build",
+    "build": "remix build && node ./build.js && mkdir -p .output/static && cp -r public/build .output/static/build && cp routes-manifest.json .output/routes-manifest.json",
     "dev": "remix dev",
     "start": "node server.js",
     "routes": "remix routes"
