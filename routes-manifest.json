@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "basePath": "",
+  "pages404": true,
+  "rewrites": [
+    {
+      "source": "/.*",
+      "regex": "^(.*)",
+      "destination": "/"
+    }
+  ]
+}

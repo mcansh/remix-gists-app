@@ -1,0 +1,8 @@
+/.cache
+/server/build
+/public/build
+/yarn.lock
+/node_modules
+.vercel
+
+.output
