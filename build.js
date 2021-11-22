@@ -7,8 +7,18 @@ async function build() {
   let start = Date.now();
   console.log("BUILDING");
 
+  let base = "server";
+  try {
+    const configPath = path.join(__dirname, "remix.config.js");
+    const remixConfig = await readFile(configPath, "utf8");
+    const config = JSON.parse(remixConfig);
+    base = config.serverBuildDirectory || base;
+  } catch (error) {
+    // do nothing, use the default
+  }
+
   await esbuild.build({
-    entryPoints: ["server/index.js"],
+    entryPoints: [`${base}/index.js`],
     outfile: path.join(".output/server/pages", "index.js"),
     bundle: true,
     platform: "node",
