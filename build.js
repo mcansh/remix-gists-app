@@ -5,7 +5,7 @@ const fse = require("fs-extra");
 
 async function build() {
   let start = Date.now();
-  console.log("BUILDING");
+  console.log("BUILDING FOR VERCEL");
 
   let base = "server";
   try {
@@ -25,7 +25,7 @@ async function build() {
   });
 
   let end = Date.now();
-  console.log(`BUILT IN ${end - start}ms`);
+  console.log(`BUILT FOR VERCEL IN ${end - start}ms`);
 
   ///////////////////////////////////////////////////////////////
 
