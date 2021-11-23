@@ -23,8 +23,30 @@ async function build() {
   console.log(`BUILT FOR VERCEL IN ${end - start}ms`);
 
   ///////////////////////////////////////////////////////////////
+  let serverPromise = fsp.writeFile(
+    ".output/server/pages/index.js",
+    `const { createRequestHandler } = require("@remix-run/vercel");
 
-  await fsp.writeFile(
+module.exports = createRequestHandler({
+  build: require("./build"),
+});
+    `
+  );
+
+  let serverNftPromise = fsp.writeFile(
+    `.output/server/pages/index.nft.json`,
+    JSON.stringify({
+      version: 1,
+      files: [
+        {
+          input: "../../build",
+          output: "./build",
+        },
+      ],
+    })
+  );
+
+  let routeManifestPromise = fsp.writeFile(
     ".output/routes-manifest.json",
     JSON.stringify({
       version: 3,
@@ -40,28 +62,7 @@ async function build() {
     })
   );
 
-  await fsp.writeFile(
-    `.output/server/pages/index.nft.json`,
-    JSON.stringify({
-      version: 1,
-      files: [
-        {
-          input: "../../build",
-          output: "./build",
-        },
-      ],
-    })
-  );
-
-  await fsp.writeFile(
-    ".output/server/pages/index.js",
-    `
-      const { createRequestHandler } = require("@remix-run/vercel");
-      module.exports = createRequestHandler({
-        build: require("./build"),
-      });
-    `.trim()
-  );
+  await Promise.all([serverPromise, serverNftPromise, routeManifestPromise]);
 
   end = Date.now();
   console.log(`COPIED IN ${end - start}ms`);
