@@ -35,7 +35,7 @@ async function build() {
 
   await Promise.all([
     copyDir("public", ".output/static"),
-    await fsp.writeFile(
+    fsp.writeFile(
       ".output/routes-manifest.json",
       JSON.stringify({
         version: 3,
