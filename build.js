@@ -33,11 +33,20 @@ async function build() {
 
   console.log("COPYING FILES TO .OUTPUT");
 
-  await fse.mkdir(".output/static", { recursive: true });
-
   await Promise.all([
     fse.copy("public/build", ".output/static/build"),
-    fse.copyFile("routes-manifest.json", ".output/routes-manifest.json"),
+    fse.writeJSON(".output/routes-manifest.json", {
+      version: 3,
+      basePath: "/",
+      pages404: false,
+      rewrites: [
+        {
+          source: "/(.*)",
+          regex: "/(.*)",
+          destination: "/",
+        },
+      ],
+    }),
   ]);
 
   end = Date.now();
