@@ -2,7 +2,7 @@ import * as React from "react";
 import type { LoaderFunction, ActionFunction, FormProps } from "remix";
 import {
   useLoaderData,
-  usePendingFormSubmit,
+  useTransition,
   Form,
   json,
   redirect
@@ -63,9 +63,9 @@ export default function Methods() {
   let [enctype, setEnctype] = React.useState<FormProps["encType"]>(
     "application/x-www-form-urlencoded"
   );
-  let pendingFormSubmit = usePendingFormSubmit();
-  let pendingForm = pendingFormSubmit
-    ? Object.fromEntries(pendingFormSubmit.data)
+  let transition = useTransition();
+  let pendingForm = transition.submission
+    ? Object.fromEntries(transition.submission.formData)
     : null;
 
   return (
