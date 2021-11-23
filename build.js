@@ -34,7 +34,7 @@ async function build() {
   console.log("COPYING FILES TO .OUTPUT");
 
   await Promise.all([
-    copyDir("public/build", ".output/static/build"),
+    copyDir("public", ".output/static"),
     await fsp.writeFile(
       ".output/routes-manifest.json",
       JSON.stringify({
