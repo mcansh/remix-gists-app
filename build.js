@@ -1,7 +1,7 @@
+const fsp = require("fs/promises");
 const path = require("path");
 
 const esbuild = require("esbuild");
-const fse = require("fs-extra");
 
 async function build() {
   let start = Date.now();
@@ -34,23 +34,40 @@ async function build() {
   console.log("COPYING FILES TO .OUTPUT");
 
   await Promise.all([
-    fse.copy("public/build", ".output/static/build"),
-    fse.writeJSON(".output/routes-manifest.json", {
-      version: 3,
-      basePath: "/",
-      pages404: false,
-      rewrites: [
-        {
-          source: "/(.*)",
-          regex: "/(.*)",
-          destination: "/",
-        },
-      ],
-    }),
+    copyDir("public/build", ".output/static/build"),
+    await fsp.writeFile(
+      ".output/routes-manifest.json",
+      JSON.stringify({
+        version: 3,
+        basePath: "/",
+        pages404: false,
+        rewrites: [
+          {
+            source: "/(.*)",
+            regex: "/(.*)",
+            destination: "/",
+          },
+        ],
+      })
+    ),
   ]);
 
   end = Date.now();
   console.log(`COPIED IN ${end - start}ms`);
+}
+
+async function copyDir(src, dest) {
+  const entries = await fsp.readdir(src, { withFileTypes: true });
+  await fsp.mkdir(dest, { recursive: true });
+  for (let entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      await copyDir(srcPath, destPath);
+    } else {
+      await fsp.copyFile(srcPath, destPath);
+    }
+  }
 }
 
 build();
