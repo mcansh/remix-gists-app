@@ -3,7 +3,7 @@
  */
 module.exports = {
   appDirectory: "./app",
-  publicBuildDirectory: ".output/static/build",
+  assetsBuildDirectory: ".output/static/build",
   publicPath: "/build/",
   serverBuildDirectory: ".output/inputs/build",
   devServerPort: 8002,
